@@ -11,6 +11,8 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        'motion/react': path.resolve(__dirname, 'src/motion-shim.tsx'),
+        'framer-motion': path.resolve(__dirname, 'src/motion-shim.tsx'),
       },
     },
     build: {
