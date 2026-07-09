@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PixelForge</title>
+    <meta name="description" content="PixelForge - Siti web professionali per aziende." />
+    <link rel="canonical" href="https://pixforge.ch" />
+    
+    <!-- Preconnect to high-priority CDNs -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload Hero Image for instant Largest Contentful Paint (LCP) -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?fm=webp&auto=format&fit=crop&w=800&q=70" fetchpriority="high" type="image/webp" />
+
+    <!-- Optimized Non-Render-Blocking Google Fonts with font-display: swap -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" as="style" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+    </noscript>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pixforge.ch" />
+    <meta property="og:title" content="PixelForge" />
+    <meta property="og:description" content="PixelForge creates premium websites for companies in Switzerland. Based in Bellinzona, Ticino." />
+    <meta property="og:image" content="https://pixforge.ch/assets/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://pixforge.ch" />
+    <meta name="twitter:title" content="PixelForge" />
+    <meta name="twitter:description" content="PixelForge creates premium websites for companies in Switzerland. Based in Bellinzona, Ticino." />
+    <meta name="twitter:image" content="https://pixforge.ch/assets/og-image.jpg" />
+
+    <!-- LocalBusiness Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "PixelForge",
+      "image": "https://pixforge.ch/assets/og-image.jpg",
+      "url": "https://pixforge.ch",
+      "email": "info@pixforge.ch",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bellinzona",
+        "addressRegion": "Ticino",
+        "addressCountry": "CH"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "46.1963",
+        "longitude": "9.0224"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <!-- A hidden HTML form to let Netlify's server-side post-processor detect the form -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="business" />
+      <textarea name="message"></textarea>
+    </form>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

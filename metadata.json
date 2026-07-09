@@ -1,0 +1,6 @@
+{
+  "name": "PixelForge",
+  "description": "Siti web premium per aziende che vogliono crescere. Creiamo siti moderni, veloci e professionali per attività locali in Svizzera.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
