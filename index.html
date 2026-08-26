@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creazione Siti Web Ticino | PixelForge – Bellinzona & Lugano</title>
+    <meta name="description" content="PixelForge è un'agenzia web a Bellinzona specializzata nella creazione e realizzazione di siti web per aziende in Ticino e Lugano. Siti veloci, moderni e ottimizzati per Google." />
+    <meta name="keywords" content="creazione siti web Ticino, web agency Ticino, siti web Bellinzona, realizzazione siti web Lugano, agenzia web Bellinzona" />
+    <link rel="canonical" href="https://pixforge.ch" />
+
+    <!-- Google Consent Mode defaults (analytics/ads storage denied) -- set before ANY Google
+         script exists on the page. Google Analytics itself is NOT loaded here: the gtag.js
+         script is only fetched dynamically, and only after the visitor explicitly accepts
+         analytics cookies (see src/lib/analytics.ts). This stub just makes early gtag()
+         calls safe to queue instead of throwing, and records the consent default so any
+         script that DOES load later already knows the visitor's standing choice. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      var pfConsentGranted = false;
+      try {
+        var pfStored = JSON.parse(localStorage.getItem('pf_cookie_consent'));
+        pfConsentGranted = !!(pfStored && pfStored.analytics === true);
+      } catch (e) {}
+      gtag('consent', 'default', {
+        ad_storage: pfConsentGranted ? 'granted' : 'denied',
+        ad_user_data: pfConsentGranted ? 'granted' : 'denied',
+        ad_personalization: pfConsentGranted ? 'granted' : 'denied',
+        analytics_storage: pfConsentGranted ? 'granted' : 'denied',
+        wait_for_update: 500
+      });
+    </script>
+    <!-- Preconnect to high-priority CDNs -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+
+    <!-- Self-hosted fonts (see src/index.css for @font-face rules), all three
+         preloaded -- Fira Code (font-mono) is used above the fold by every section's
+         kicker/badge label, including the Hero's, so leaving it undiscovered until
+         the CSS parses was adding a full extra network round-trip to the critical
+         path. font-display: swap means text still paints immediately with the
+         fallback stack regardless, but preloading avoids the later, disruptive swap. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/outfit-variable.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-variable.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/fira-code-variable.woff2" crossorigin />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pixforge.ch" />
+    <meta property="og:title" content="Creazione Siti Web Ticino | PixelForge – Bellinzona & Lugano" />
+    <meta property="og:description" content="Web agency a Bellinzona specializzata nella creazione di siti web professionali per aziende in Ticino, Lugano e in tutta la Svizzera italiana." />
+    <meta property="og:image" content="https://pixforge.ch/assets/og-image.jpg" />
+    <meta property="og:locale" content="it_CH" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://pixforge.ch" />
+    <meta name="twitter:title" content="Creazione Siti Web Ticino | PixelForge – Bellinzona & Lugano" />
+    <meta name="twitter:description" content="Web agency a Bellinzona specializzata nella creazione di siti web professionali per aziende in Ticino, Lugano e in tutta la Svizzera italiana." />
+    <meta name="twitter:image" content="https://pixforge.ch/assets/og-image.jpg" />
+
+    <!-- LocalBusiness Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "PixelForge",
+      "alternateName": "PixelForge - Web Agency Ticino",
+      "description": "Web agency a Bellinzona specializzata nella creazione e realizzazione di siti web professionali per aziende in Ticino, Lugano e in tutta la Svizzera italiana.",
+      "image": "https://pixforge.ch/assets/og-image.jpg",
+      "url": "https://pixforge.ch",
+      "email": "info@pixforge.ch",
+      "priceRange": "CHF 900 - CHF 2100",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bellinzona",
+        "addressRegion": "Ticino",
+        "addressCountry": "CH"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "46.1963",
+        "longitude": "9.0224"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Bellinzona" },
+        { "@type": "City", "name": "Lugano" },
+        { "@type": "AdministrativeArea", "name": "Ticino" },
+        { "@type": "Country", "name": "Svizzera" }
+      ],
+      "sameAs": [
+        "https://instagram.com/pixelforge.ch"
+      ],
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <!-- A hidden HTML form to let Netlify's server-side post-processor detect the form -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="business" />
+      <textarea name="message"></textarea>
+    </form>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

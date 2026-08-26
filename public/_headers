@@ -1,0 +1,82 @@
+# Security headers, applied to every response. Netlify merges header blocks
+# additively per matching path, so this does not override the more specific
+# Cache-Control rules below -- both apply together.
+#
+# Strict-Transport-Security is deliberately NOT set here: Netlify already injects
+# it at the platform level for this site, and redeclaring it here risks silently
+# replacing that (possibly stronger) platform value with a weaker guess.
+#
+# script-src/style-src include 'unsafe-inline' as a deliberate, scoped tradeoff:
+# - script-src: React 19's streaming SSR (used by this project's prerender
+#   pipeline) injects small `$RC("B:n","S:n")` Suspense-boundary-completion
+#   scripts directly into the prerendered HTML. Their number depends on how many
+#   Suspense boundaries exist on a given page, so it changes with ordinary
+#   component edits -- a hash-allowlist for these would silently break on the
+#   next unrelated deploy. googletagmanager.com is allowlisted explicitly since
+#   that's the only external script host in use (Google Analytics, loaded only
+#   after cookie consent).
+# - style-src: this codebase uses many literal inline `<style>` blocks (marquee
+#   keyframes, the AI chat widget's themed styles) alongside React's `style`
+#   prop, which a nonce/hash pipeline isn't set up for.
+# Every other directive stays scoped to 'self' plus the exact third-party hosts
+# this site actually calls (Google Analytics, Unsplash/Picsum images, the n8n
+# Cloud chat webhook) -- CSP injection risk is bounded by script-src regardless,
+# since arbitrary attacker-hosted script/style still cannot be loaded.
+#
+# stats.g.doubleclick.net (connect-src) and google.com/google.ch (img-src, the
+# "/ads/ga-audiences" pixel) are gtag.js's automatic Ads remarketing-signal
+# beacons, fired whenever a visitor grants the bundled ad_storage/analytics_storage
+# consent in the cookie banner. google.ch is listed alongside google.com since
+# this beacon's host varies by the visitor's Google country domain and Swiss
+# visitors are this site's primary audience; other country TLDs may still see
+# this one non-critical beacon blocked, which does not affect core GA
+# page/event tracking.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com https://picsum.photos https://www.google.com https://www.google.ch; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://pixforge.app.n8n.cloud wss://pixforge.app.n8n.cloud; frame-src 'none'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), xr-spatial-tracking=()
+
+/sitemap.xml
+  Content-Type: application/xml; charset=UTF-8
+
+# Vite build output uses content-hashed filenames, so it is safe to cache forever --
+# a new deploy always ships new filenames rather than mutating these.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=2592000
+
+# The HTML entry point(s) must always revalidate so visitors get the latest deploy's
+# asset references instead of a stale cached shell. Every prerendered route (plus the
+# SPA fallback shell) is listed explicitly rather than via a catch-all /*, since a
+# broad wildcard would also match /assets/*, /fonts/* and /images/* and could conflict
+# with their long-lived immutable caching above.
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/app-shell.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/blog
+  Cache-Control: public, max-age=0, must-revalidate
+
+/blog/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacy-policy
+  Cache-Control: public, max-age=0, must-revalidate
+
+/cookie-policy
+  Cache-Control: public, max-age=0, must-revalidate
+
+/termini-e-condizioni
+  Cache-Control: public, max-age=0, must-revalidate

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home Page -->
+  <url>
+    <loc>https://pixforge.ch/</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- Services -->
+  <url>
+    <loc>https://pixforge.ch/#servizi</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Portfolio -->
+  <url>
+    <loc>https://pixforge.ch/#portfolio</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- Pricing -->
+  <url>
+    <loc>https://pixforge.ch/#listino</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Contact -->
+  <url>
+    <loc>https://pixforge.ch/#contatti</loc>
+    <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://pixforge.ch/privacy-policy</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <!-- Cookie Policy -->
+  <url>
+    <loc>https://pixforge.ch/cookie-policy</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <!-- Termini e Condizioni -->
+  <url>
+    <loc>https://pixforge.ch/termini-e-condizioni</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <!-- Blog -->
+  <url>
+    <loc>https://pixforge.ch/blog</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Blog Article: Quanto costa un sito web professionale in Ticino nel 2026? -->
+  <url>
+    <loc>https://pixforge.ch/blog/costo-sito-web-ticino-2026</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Blog Article: Come scegliere una web agency in Ticino -->
+  <url>
+    <loc>https://pixforge.ch/blog/come-scegliere-web-agency-ticino</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Blog Article: SEO locale in Ticino -->
+  <url>
+    <loc>https://pixforge.ch/blog/seo-locale-ticino</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Blog Article: 7 errori che fanno perdere clienti a un sito aziendale -->
+  <url>
+    <loc>https://pixforge.ch/blog/7-errori-sito-web-aziendale</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Blog Article: Sito web lento, perché la velocità influisce su clienti, SEO e conversioni -->
+  <url>
+    <loc>https://pixforge.ch/blog/sito-web-lento-velocita-seo-conversioni</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Blog Article: Come aumentare le conversioni del sito web in Ticino -->
+  <url>
+    <loc>https://pixforge.ch/blog/aumentare-conversioni-sito-web-ticino</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

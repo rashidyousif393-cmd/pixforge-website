@@ -1,0 +1,12 @@
+# PixelForge
+
+PixelForge è una web agency con sede a Bellinzona, in Ticino, specializzata nella creazione di siti web premium, landing page ad alta conversione e SEO locale per piccole e medie imprese in Ticino, Lugano e in tutta la Svizzera italiana. Ogni sito è sviluppato su misura, senza template prefabbricati, con un forte focus su velocità, design e generazione di contatti reali.
+
+## Pagine principali
+
+- [Home](https://pixforge.ch/)
+- [Servizi](https://pixforge.ch/#servizi)
+- [Portfolio](https://pixforge.ch/#portfolio)
+- [Listino prezzi](https://pixforge.ch/#listino)
+- [Contatti](https://pixforge.ch/#contatti)
+- [Blog](https://pixforge.ch/blog)
