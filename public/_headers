@@ -6,18 +6,27 @@
 # it at the platform level for this site, and redeclaring it here risks silently
 # replacing that (possibly stronger) platform value with a weaker guess.
 #
-# script-src/style-src include 'unsafe-inline' as a deliberate, scoped tradeoff:
-# - script-src: React 19's streaming SSR (used by this project's prerender
-#   pipeline) injects small `$RC("B:n","S:n")` Suspense-boundary-completion
-#   scripts directly into the prerendered HTML. Their number depends on how many
-#   Suspense boundaries exist on a given page, so it changes with ordinary
-#   component edits -- a hash-allowlist for these would silently break on the
-#   next unrelated deploy. googletagmanager.com is allowlisted explicitly since
-#   that's the only external script host in use (Google Analytics, loaded only
-#   after cookie consent).
-# - style-src: this codebase uses many literal inline `<style>` blocks (marquee
-#   keyframes, the AI chat widget's themed styles) alongside React's `style`
-#   prop, which a nonce/hash pipeline isn't set up for.
+# script-src has NO 'unsafe-inline': scripts/inject-csp-hashes.mjs (run as part of
+# `npm run build`, right after prerendering) computes sha256 hashes for every
+# inline <script> in the FINAL prerendered HTML output and rewrites the
+# `script-src 'self' https://www.googletagmanager.com;` placeholder below into
+# `dist/_headers` with those exact hashes inserted. This is computed fresh on
+# every build rather than hand-maintained: React 19's streaming SSR (used by
+# this project's prerender pipeline) bakes small `$RC("B:n","S:n")`
+# Suspense-boundary-completion scripts directly into each route's HTML, and
+# their count/content depends on how many Suspense boundaries exist on that
+# page -- a hand-maintained hash list would silently go stale the next time an
+# unrelated component change shifted that count. googletagmanager.com is
+# allowlisted explicitly since that's the only external script host in use
+# (Google Analytics, loaded only after cookie consent). Do not add
+# 'unsafe-inline' back here without also removing the injection step --
+# 'unsafe-inline' is ignored by browsers whenever hashes are also present in
+# the same directive, so the two must not coexist.
+#
+# style-src still uses 'unsafe-inline' deliberately: this codebase has many
+# literal inline `<style>` blocks (marquee keyframes, the AI chat widget's
+# themed styles) that a nonce/hash pipeline isn't set up for. Out of scope for
+# this change -- script-src only.
 # Every other directive stays scoped to 'self' plus the exact third-party hosts
 # this site actually calls (Google Analytics, Unsplash/Picsum images, the n8n
 # Cloud chat webhook) -- CSP injection risk is bounded by script-src regardless,
@@ -32,7 +41,7 @@
 # this one non-critical beacon blocked, which does not affect core GA
 # page/event tracking.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com https://picsum.photos https://www.google.com https://www.google.ch; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://pixforge.app.n8n.cloud wss://pixforge.app.n8n.cloud; frame-src 'none'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com https://picsum.photos https://www.google.com https://www.google.ch; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://pixforge.app.n8n.cloud wss://pixforge.app.n8n.cloud; frame-src 'none'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
