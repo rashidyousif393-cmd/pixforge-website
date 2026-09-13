@@ -23,7 +23,13 @@ const Contact = lazy(() => import("../components/Contact"));
 export default function HomePage() {
   const location = useLocation();
 
-  useDocumentHead(getRouteMeta("/"));
+  // Must track the actual path, not a hardcoded "/": useDocumentHead's effect
+  // runs on the client during hydration too, so on "/en" a hardcoded "/" here
+  // would silently overwrite the SSR-correct /en canonical/title back to the
+  // Italian ones the moment React hydrates. getRouteMeta() already falls back
+  // to "/" for any other pathname, so this is a strict improvement, not a
+  // behavior change, for every route other than "/en".
+  useDocumentHead(getRouteMeta(location.pathname));
 
   // When arriving at "/" with a hash (e.g. a nav link clicked from a blog page),
   // scroll to that section once its content has mounted.

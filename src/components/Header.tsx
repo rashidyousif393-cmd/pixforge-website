@@ -18,7 +18,11 @@ export default function Header({ activeSection, onOpenAIChat }: HeaderProps) {
   const lastScrollY = useRef(0);
   const navigate = useNavigate();
   const location = useLocation();
-  const isHome = location.pathname === "/";
+  // "/en" is the same homepage content as "/", just rendered in English (see
+  // routeMeta.ts / LanguageContext.tsx) -- every isHome-gated behavior below
+  // (hash-link scrolling instead of navigating away, active-nav-item
+  // highlighting) must treat it identically to "/".
+  const isHome = location.pathname === "/" || location.pathname === "/en";
   const magneticDemoCtaRef = useMagneticEffect<HTMLAnchorElement>(0.25);
 
   useEffect(() => {
@@ -79,10 +83,24 @@ export default function Header({ activeSection, onOpenAIChat }: HeaderProps) {
     }
   };
 
+  // On the homepage ("/" or "/en"), switching language must also move to that
+  // language's own URL ("/" for it, "/en" for en) so the canonical/hreflang
+  // stay correct -- and keep whatever hash was in the current URL (e.g.
+  // "#servizi") so the visitor stays on the same section instead of being
+  // dropped back to the top. Everywhere else, this is unchanged from before:
+  // a pure client-side text switch with no navigation.
+  const handleLanguageSwitch = (lang: "it" | "en") => {
+    setLanguage(lang);
+    if (isHome) {
+      const targetPath = lang === "en" ? "/en" : "/";
+      navigate(`${targetPath}${location.hash}`);
+    }
+  };
+
   const LanguageSwitcher = () => (
     <div className="flex items-center gap-1 bg-zinc-950/80 border border-zinc-800/80 p-1 rounded-full text-[10px] font-bold shadow-inner">
       <button
-        onClick={() => setLanguage("it")}
+        onClick={() => handleLanguageSwitch("it")}
         className={`px-2 py-1 rounded-full transition-all cursor-pointer ${
           language === "it"
             ? "bg-gold-500 text-dark-bg font-extrabold shadow"
@@ -93,7 +111,7 @@ export default function Header({ activeSection, onOpenAIChat }: HeaderProps) {
       </button>
       <span className="text-zinc-800 select-none px-0.5">|</span>
       <button
-        onClick={() => setLanguage("en")}
+        onClick={() => handleLanguageSwitch("en")}
         className={`px-2 py-1 rounded-full transition-all cursor-pointer ${
           language === "en"
             ? "bg-gold-500 text-dark-bg font-extrabold shadow"
