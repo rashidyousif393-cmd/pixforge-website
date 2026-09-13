@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect, useRef, Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import IntroOverlay from "./components/IntroOverlay";
@@ -56,10 +56,13 @@ export function AppInner() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const [activeSection, setActiveSection] = useState("home");
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const [introDone, setIntroDone] = useState(false);
+  const outerGlowRef = useRef<HTMLDivElement>(null);
+  const innerGlowRef = useRef<HTMLDivElement>(null);
+  const mousePositionRef = useRef({ x: 0, y: 0 });
+  const animationFrameRef = useRef<number | null>(null);
 
   // Keep ScrollTrigger positions in sync with content that reflows independently
   // of the window resize event: language switches (different text length) and
@@ -106,8 +109,27 @@ export function AppInner() {
       return;
     }
 
+    // Position updates bypass React state -- writing mousePos to state on every
+    // mousemove event forced a full re-render (and both glow divs) per pixel of
+    // movement. Instead, the raw position is stashed in a ref and applied
+    // directly to each div's `transform` in a single rAF-batched write, which
+    // also finally makes the divs' existing `transition-transform` classes do
+    // something (previously a no-op, since `left`/`top` were what animated).
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      mousePositionRef.current = { x: e.clientX, y: e.clientY };
+
+      if (animationFrameRef.current !== null) return;
+
+      animationFrameRef.current = window.requestAnimationFrame(() => {
+        const { x, y } = mousePositionRef.current;
+        if (outerGlowRef.current) {
+          outerGlowRef.current.style.transform = `translate3d(${x - 225}px, ${y - 225}px, 0)`;
+        }
+        if (innerGlowRef.current) {
+          innerGlowRef.current.style.transform = `translate3d(${x - 70}px, ${y - 70}px, 0)`;
+        }
+        animationFrameRef.current = null;
+      });
     };
 
     const handleMouseEnter = () => setIsVisible(true);
@@ -124,6 +146,10 @@ export function AppInner() {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
     };
   }, []);
 
@@ -176,19 +202,23 @@ export function AppInner() {
           {isVisible && (
             <>
               <div
+                ref={outerGlowRef}
                 className="pointer-events-none fixed z-50 w-[450px] h-[450px] rounded-full opacity-35 blur-[120px] transition-transform duration-150 ease-out"
                 style={{
                   background: "radial-gradient(circle, rgba(223, 181, 28, 0.15) 0%, rgba(0, 122, 255, 0.12) 50%, transparent 100%)",
-                  left: `${mousePos.x - 225}px`,
-                  top: `${mousePos.y - 225}px`,
+                  left: 0,
+                  top: 0,
+                  transform: "translate3d(-450px, -450px, 0)",
                 }}
               />
               <div
+                ref={innerGlowRef}
                 className="pointer-events-none fixed z-50 w-[140px] h-[140px] rounded-full opacity-40 blur-[45px] transition-transform duration-100 ease-out"
                 style={{
                   background: "radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(223, 181, 28, 0.18) 55%, transparent 100%)",
-                  left: `${mousePos.x - 70}px`,
-                  top: `${mousePos.y - 70}px`,
+                  left: 0,
+                  top: 0,
+                  transform: "translate3d(-140px, -140px, 0)",
                 }}
               />
             </>
