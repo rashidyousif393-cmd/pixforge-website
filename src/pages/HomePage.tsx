@@ -20,6 +20,21 @@ const About = lazy(() => import("../components/About"));
 const Testimonials = lazy(() => import("../components/Testimonials"));
 const Contact = lazy(() => import("../components/Contact"));
 
+// Netlify normalizes a directory-style route's bare path to a trailing slash
+// (e.g. a fresh load of "/en" 301s to "/en/") before the SPA ever loads, so
+// window.location.pathname -- and therefore useLocation().pathname on that
+// first render -- is "/en/", not "/en". getRouteMeta's lookup table is keyed
+// by the slash-less logical path ("/en"), so without stripping it back off
+// here first, that lookup silently misses and falls back to "/"'s (Italian)
+// metadata. Root stays "/" untouched -- only strip a trailing slash when
+// there's more than just that one leading slash to begin with.
+function normalizePathname(pathname: string): string {
+  if (pathname.length > 1 && pathname.endsWith("/")) {
+    return pathname.slice(0, -1);
+  }
+  return pathname;
+}
+
 export default function HomePage() {
   const location = useLocation();
 
@@ -28,8 +43,9 @@ export default function HomePage() {
   // would silently overwrite the SSR-correct /en canonical/title back to the
   // Italian ones the moment React hydrates. getRouteMeta() already falls back
   // to "/" for any other pathname, so this is a strict improvement, not a
-  // behavior change, for every route other than "/en".
-  useDocumentHead(getRouteMeta(location.pathname));
+  // behavior change, for every route other than "/en" (and "/en/", now that
+  // it's normalized first).
+  useDocumentHead(getRouteMeta(normalizePathname(location.pathname)));
 
   // When arriving at "/" with a hash (e.g. a nav link clicked from a blog page),
   // scroll to that section once its content has mounted.

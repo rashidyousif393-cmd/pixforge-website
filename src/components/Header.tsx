@@ -9,6 +9,19 @@ interface HeaderProps {
   onOpenAIChat: () => void;
 }
 
+// Netlify normalizes a directory-style route's bare path to a trailing slash
+// (e.g. a fresh load of "/en" 301s to "/en/") before the SPA ever loads, so
+// useLocation().pathname on that first render is "/en/", not "/en" -- and an
+// exact-string isHome check below would otherwise miss it. Root stays "/"
+// untouched -- only strip a trailing slash when there's more than just that
+// one leading slash to begin with.
+function normalizePathname(pathname: string): string {
+  if (pathname.length > 1 && pathname.endsWith("/")) {
+    return pathname.slice(0, -1);
+  }
+  return pathname;
+}
+
 export default function Header({ activeSection, onOpenAIChat }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,8 +34,10 @@ export default function Header({ activeSection, onOpenAIChat }: HeaderProps) {
   // "/en" is the same homepage content as "/", just rendered in English (see
   // routeMeta.ts / LanguageContext.tsx) -- every isHome-gated behavior below
   // (hash-link scrolling instead of navigating away, active-nav-item
-  // highlighting) must treat it identically to "/".
-  const isHome = location.pathname === "/" || location.pathname === "/en";
+  // highlighting) must treat it identically to "/". Normalized first so a
+  // fresh load of "/en" (which Netlify redirects to "/en/") still matches.
+  const normalizedPathname = normalizePathname(location.pathname);
+  const isHome = normalizedPathname === "/" || normalizedPathname === "/en";
   const magneticDemoCtaRef = useMagneticEffect<HTMLAnchorElement>(0.25);
 
   useEffect(() => {
