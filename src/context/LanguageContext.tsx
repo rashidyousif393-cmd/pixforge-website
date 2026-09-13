@@ -1703,16 +1703,29 @@ export const translations: Record<Language, Record<string, any>> = {
   }
 };
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const LanguageProvider: React.FC<{ children: React.ReactNode; initialPath?: string }> = ({
+  children,
+  initialPath,
+}) => {
   // Hydration-safe: the initial render must produce the exact same output on the
-  // server (prerender) and on the client's first hydration pass, so this always
-  // starts at the fixed default -- never reads localStorage during render/init.
-  // localStorage is only consulted after mount, in the effect below, so any
-  // stored preference applies as a fast, harmless correction just after hydration
-  // instead of causing a server/client markup mismatch.
-  const [language, setLanguage] = useState<Language>("it");
+  // server (prerender) and on the client's first hydration pass. `initialPath` is
+  // passed explicitly by entry-server.tsx (no `window` there); on the client it
+  // falls back to `window.location.pathname`, read synchronously before first
+  // render (not in an effect), so both sides derive the same starting language
+  // from the same real URL -- no server/client markup mismatch.
+  //
+  // "/en" is a dedicated, crawlable English URL (see routeMeta.ts) and must
+  // always start in English -- including for a returning visitor whose saved
+  // preference is Italian, since landing there (e.g. from a search result for
+  // the English page) should show English, not silently flip back. Every other
+  // route keeps the prior behavior exactly: fixed "it" default, corrected after
+  // mount by any saved preference.
+  const path = initialPath ?? (typeof window !== "undefined" ? window.location.pathname : "/");
+  const isEnglishRoute = path === "/en" || path.startsWith("/en/");
+  const [language, setLanguage] = useState<Language>(isEnglishRoute ? "en" : "it");
 
   useEffect(() => {
+    if (isEnglishRoute) return;
     try {
       const saved = localStorage.getItem("pixelforge_lang");
       if ((saved === "it" || saved === "en") && saved !== language) {

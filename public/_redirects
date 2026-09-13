@@ -1,1 +1,8 @@
-/*    /app-shell.html   200
+# Every real, indexable page (home, /en, /chi-siamo, blog list + every post,
+# the 3 legal pages) is a literal prerendered static file, which Netlify
+# always matches and serves before ever consulting this file -- this rule
+# only fires for genuinely unknown URLs. Status 404 (not 200) so those return
+# a real 404 to crawlers/AdsBot while still serving app-shell.html's markup,
+# letting React Router mount and render the actual translated NotFoundPage UI
+# instead of a blank or generic host error page.
+/*    /app-shell.html   404

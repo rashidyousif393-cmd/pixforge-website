@@ -18,9 +18,11 @@ export { getIndexableRoutePaths } from "./lib/routeMeta";
  * output always contains complete, crawlable markup rather than fallbacks.
  */
 export async function render(url: string): Promise<{ html: string; meta: RouteMeta }> {
+  const pathname = url.split("?")[0].split("#")[0];
+
   const { prelude } = await prerenderToNodeStream(
     <StrictMode>
-      <AppProviders>
+      <AppProviders initialPath={pathname}>
         <StaticRouter location={url}>
           <AppInner />
         </StaticRouter>
@@ -33,6 +35,5 @@ export async function render(url: string): Promise<{ html: string; meta: RouteMe
     html += typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf-8");
   }
 
-  const pathname = url.split("?")[0].split("#")[0];
   return { html, meta: getRouteMeta(pathname) };
 }

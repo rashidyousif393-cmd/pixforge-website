@@ -13,6 +13,7 @@ const FloatingGoogleReview = lazy(() => import("./components/FloatingGoogleRevie
 // downloaded after the initial page has rendered, keeping it off the critical path.
 const AIChatWidget = lazy(() => import("./components/AIChatWidget"));
 import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
 import BlogListPage from "./pages/BlogListPage";
 import BlogArticlePage from "./pages/BlogArticlePage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
@@ -43,9 +44,15 @@ export default function App() {
 // Shared context providers, extracted so entry-server.tsx can wrap AppInner in a
 // StaticRouter (server-safe, no browser `history` API) instead of BrowserRouter
 // while reusing the exact same provider/component tree as the real client app.
-export function AppProviders({ children }: { children: React.ReactNode }) {
+export function AppProviders({
+  children,
+  initialPath,
+}: {
+  children: React.ReactNode;
+  initialPath?: string;
+}) {
   return (
-    <LanguageProvider>
+    <LanguageProvider initialPath={initialPath}>
       <CookieConsentProvider>{children}</CookieConsentProvider>
     </LanguageProvider>
   );
@@ -230,6 +237,13 @@ export function AppInner() {
           {/* Routed page content */}
           <Routes>
             <Route path="/" element={<HomePage />} />
+            {/* Dedicated, crawlable English homepage URL -- same component tree as
+                "/", rendered in English because LanguageProvider seeds its initial
+                state from the URL (see context/LanguageContext.tsx). Exists only
+                for the homepage, since that's the one page with complete, genuine
+                English content everywhere else already flowed through it. */}
+            <Route path="/en" element={<HomePage />} />
+            <Route path="/chi-siamo" element={<AboutPage />} />
             <Route path="/blog" element={<BlogListPage />} />
             <Route path="/blog/:slug" element={<BlogArticlePage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

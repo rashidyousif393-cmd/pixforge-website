@@ -30,9 +30,35 @@ function replaceOrThrow(html, pattern, replacement, label) {
   return html.replace(pattern, replacement);
 }
 
+// This route's own declared language: every route is Italian except "/en".
+// Derived from canonicalPath rather than passed separately so applyRouteMeta's
+// signature (and every call site) stays unchanged.
+function htmlLangFor(meta) {
+  return meta.canonicalPath === "/en" ? "en" : "it";
+}
+
+// Fills the HREFLANG_PLACEHOLDER marker in index.html with this route's
+// reciprocal <link rel="alternate"> tags, from routeMeta.ts's `hreflang`
+// field. Left empty on routes with no second-language URL to point to,
+// rather than pointing hreflang at content that doesn't exist.
+function hreflangLinksFor(meta) {
+  if (!meta.hreflang) return "";
+  return Object.entries(meta.hreflang)
+    .map(([hreflang, href]) => `<link rel="alternate" hreflang="${escapeHtml(hreflang)}" href="${escapeHtml(href)}" />`)
+    .join("\n    ");
+}
+
 function applyRouteMeta(templateHtml, meta) {
   const canonicalUrl = `${SITE_URL}${meta.canonicalPath}`;
   let html = templateHtml;
+
+  html = replaceOrThrow(html, /<html lang="[^"]*"/, `<html lang="${htmlLangFor(meta)}"`, "html lang attribute");
+  html = replaceOrThrow(
+    html,
+    /<!-- HREFLANG_PLACEHOLDER -->/,
+    hreflangLinksFor(meta),
+    "HREFLANG_PLACEHOLDER"
+  );
 
   html = replaceOrThrow(html, /<title>[^<]*<\/title>/, `<title>${escapeHtml(meta.title)}</title>`, "title");
   html = replaceOrThrow(
